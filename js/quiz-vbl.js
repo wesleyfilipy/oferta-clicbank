@@ -255,20 +255,20 @@ function ProgressCountdown(timeleft, text) {
 
 const unlockButton = document.getElementById('unlock-discount');
 
-unlockButton.addEventListener('click', function () {
-  // Esconde o quiz
-  quizWrp.style.display = 'none';
+// unlockButton.addEventListener('click', function () {
+//   // Esconde o quiz
+//   quizWrp.style.display = 'none';
 
-  // Mostra os elementos após o quiz
-  afterQuiz.forEach(e => {
-    e.style.display = 'block';
-  });
+//   // Mostra os elementos após o quiz
+//   afterQuiz.forEach(e => {
+//     e.style.display = 'block';
+//   });
 
-  // Faz o scroll suave até o elemento com id "firstPackage"
-  $('html, body').animate({
-    scrollTop: $('#scrolldown').offset().top
-  }, 1000);
-});
+//   // Faz o scroll suave até o elemento com id "firstPackage"
+//   $('html, body').animate({
+//     scrollTop: $('#scrolldown').offset().top
+//   }, 1000);
+// });
 
 
 
