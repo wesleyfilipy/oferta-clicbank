@@ -2901,7 +2901,7 @@
 
 								</div>
 							</div>
-							<p class="mb-0  " style="font-size: 13px;">Â© Lipo Less Research 2025. All Rights Reserved.
+							<p class="mb-0  " style="font-size: 13px;">Â© Research 2025. All Rights Reserved.
 							</p>
 						</div>
 					</footer>
@@ -2977,27 +2977,55 @@
 		<script>
 			$(document).ready(function () {
 				// 8 minutes in seconds
-				var delaySeconds = 480; 
-				
-				window._wq = window._wq || [];
-				_wq.push({ id: "rf8s1f4ikd", onReady: function(video) {
-					console.log("Wistia player ready");
-					
-					// Check time every second
-					video.bind("secondchange", function(s) {
-						if (s >= delaySeconds) {
-							console.log("20 minutes reached, revealing content");
-							$(".esconder").show();
-							// Unbind to stop checking once revealed
-							video.unbind("secondchange");
-						}
-					});
-					
-					// Also check on load in case they are already past that point (if state persistence existed, but good practice)
-					if (video.time() >= delaySeconds) {
-						$(".esconder").show();
+				var delaySeconds = 480;
+				var contentRevealed = false;
+
+				function revealContent() {
+					if (!contentRevealed) {
+						console.log("Time reached, revealing content (Quiz)");
+						$(".esconder").css("display", "block"); // Force display block
+						$(".esconder").show(); // jQuery show
+						contentRevealed = true;
 					}
-				}});
+				}
+
+				window._wq = window._wq || [];
+				_wq.push({
+					id: "rf8s1f4ikd", onReady: function (video) {
+						console.log("Wistia player ready");
+
+						// Check time every second via Wistia API
+						video.bind("secondchange", function (s) {
+							if (s >= delaySeconds) {
+								revealContent();
+								video.unbind("secondchange");
+							}
+						});
+
+						if (video.time() >= delaySeconds) {
+							revealContent();
+						}
+					}
+				});
+
+				// Fallback: Check every 1 second explicitly using the Wistia Player Element if API fails
+				setInterval(function () {
+					if (contentRevealed) return;
+
+					var videoElement = document.querySelector('wistia-player');
+					if (videoElement && videoElement.currentTime) {
+						if (videoElement.currentTime >= delaySeconds) {
+							console.log("Fallback check: Time reached");
+							revealContent();
+						}
+					}
+					// Also check for standard HTML5 video if Wistia renders as such
+					var html5Video = document.querySelector('video');
+					if (html5Video && html5Video.currentTime >= delaySeconds) {
+						console.log("HTML5 Video Fallback check: Time reached");
+						revealContent();
+					}
+				}, 1000);
 			});
 		</script>
 
